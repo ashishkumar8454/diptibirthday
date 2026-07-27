@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Happy Birthday Dipti ❤️</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- =====================================================
+                    LOADER
+====================================================== -->
+
+<div id="loader">
+
+    <div class="loader-content">
+
+        <div class="gift-box">
+
+            🎁
+
+        </div>
+
+        <h1>
+
+            Preparing Your Surprise...
+
+        </h1>
+
+        <p>
+
+            Loading 0%
+
+        </p>
+
+        <div class="loading-bar">
+
+            <div class="loading-fill"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+                    MUSIC
+====================================================== -->
+
+<audio
+id="bgMusic"
+loop>
+
+<source
+src="music/birthday.mp3"
+type="audio/mp3">
+
+</audio>
+
+<!-- =====================================================
+        BACKGROUND EFFECTS
+====================================================== -->
+
+<div id="flowers"></div>
+
+<div id="hearts"></div>
+
+<div id="balloons"></div>
+
+<div id="sparkles"></div>
+
+<div id="floatingQuotes"></div>
+
+<!-- =====================================================
+                HOME PAGE
+====================================================== -->
+
+<section
+id="home">
+
+<div class="glass">
+
+<h2>
+
+🎉 Happy Birthday 🎉
+
+</h2>
+
+<h1>
+
+Dipti ❤️
+
+</h1>
+
+<p>
+
+Today is not just another day...
+
+<br><br>
+
+It is the day when someone very special
+came into this world.
+
+<br><br>
+
+I wanted to give you something different.
+
+Something made only for you...
+
+❤️
+
+</p>
+
+<button
+id="startBtn">
+
+Open Your Surprise 🎁
+
+</button>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+            QUESTION PAGE
+====================================================== -->
+
+<section
+id="question"
+class="hidden">
+
+<div class="glass">
+
+<h2>
+
+One Question 😊
+
+</h2>
+
+<h1>
+
+Are You Excited
+
+For Your Birthday?
+
+🎂
+
+</h1>
+
+<p>
+
+Be honest...
+
+😁
+
+</p>
+
+<div class="button-area">
+
+<button
+id="yesBtn">
+
+YES ❤️
+
+</button>
+
+<button
+id="noBtn">
+
+NO 😅
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+                    PANDA PAGE
+====================================================== -->
+
+<section
+id="pandaPage"
+class="hidden">
+
+<div class="glass">
+
+<h2>
+
+I Knew You Would Say YES ❤️
+
+</h2>
+
+<p>
+
+So I called two cute pandas...
+
+They also wanted to wish you.
+
+🐼🐼
+
+</p>
+
+<div class="panda-wrapper">
+
+<img
+src="assets/boy-panda.png"
+alt="Boy Panda"
+class="boyPanda">
+
+<div class="gift">
+
+🎁
+
+</div>
+
+<img
+src="assets/girl-panda.png"
+alt="Girl Panda"
+class="girlPanda">
+
+</div>
+
+<p>
+
+The little gift is full of love,
+
+friendship and beautiful wishes.
+
+❤️
+
+</p>
+
+<button
+id="messageBtn">
+
+Open My Birthday Wish 💌
+
+</button>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+                MESSAGE PAGE
+====================================================== -->
+
+<section
+id="messagePage"
+class="hidden">
+
+<div class="glass">
+
+<h2>
+
+For Someone Very Special ❤️
+
+</h2>
+
+<h1>
+
+Happy Birthday Dipti 🎂
+
+</h1>
+
+<div
+id="typewriter">
+
+</div>
+
+<button
+id="galleryBtn">
+
+See Our Memories 📸
+
+</button>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+            TYPEWRITER TEXT
+====================================================== -->
+
+<script>
+
+const birthdayMessage = `
+
+Happy Birthday Dipti ❤️
+
+I don't know how to express everything
+that I feel.
+
+But today I just want to thank you.
+
+Thank you for every smile...
+
+Every conversation...
+
+Every memory...
+
+Life becomes more beautiful because
+of the people we meet.
+
+You are definitely one of those beautiful
+people.
+
+May this birthday bring happiness,
+
+success,
+
+good health,
+
+and countless beautiful memories.
+
+Keep smiling...
+
+Keep shining...
+
+and never stop being the wonderful
+person you are.
+
+Once Again...
+
+Happy Birthday Dipti ❤️
+
+`;
+
+</script>
+
+<!-- =====================================================
+                    MEMORY GALLERY
+====================================================== -->
+
+<section id="galleryPage" class="hidden">
+
+    <div class="gallery-header">
+
+        <h1>Our Beautiful Memories ❤️</h1>
+
+        <p>
+            Every picture holds a memory that deserves
+            to be remembered forever.
+        </p>
+
+    </div>
+
+    <div class="gallery">
+
+        <div class="photo-card">
+            <img src="images/photo1.jpeg" alt="">
+            <span>Memory 1</span>
+        </div>
+
+        <div class="photo-card">
+            <img src="images/photo2.jpg" alt="">
+            <span>Memory 2</span>
+        </div>
+
+        <div class="photo-card">
+            <img src="images/photo3.jpg" alt="">
+            <span>Memory 3</span>
+        </div>
+
+        <div class="photo-card">
+            <img src="images/photo4.jpg" alt="">
+            <span>Memory 4</span>
+        </div>
+
+        <div class="photo-card">
+            <img src="images/photo5.jpg" alt="">
+            <span>Memory 5</span>
+        </div>
+
+        <div class="photo-card">
+            <img src="images/photo6.jpg" alt="">
+            <span>Memory 6</span>
+        </div>
+
+        <div class="photo-card">
+            <img src="images/photo7.jpg" alt="">
+            <span>Memory 7</span>
+        </div>
+
+        <div class="photo-card">
+            <img src="images/photo8.jpg" alt="">
+            <span>Memory 8</span>
+        </div>
+
+        <div class="photo-card">
+            <img src="images/photo9.jpg" alt="">
+            <span>Memory 9</span>
+        </div>
+
+        <div class="photo-card">
+            <img src="images/photo10.jpg" alt="">
+            <span>Memory 10</span>
+        </div>
+
+    </div>
+
+    <button id="letterBtn">
+
+        Read My Letter 💌
+
+    </button>
+
+</section>
+
+<!-- =====================================================
+                    LIGHTBOX
+====================================================== -->
+
+<div id="lightbox" class="hidden">
+
+    <span id="closeLightbox">
+
+        &times;
+
+    </span>
+
+    <div class="lightbox-content">
+
+        <img
+        id="lightboxImg"
+        src="">
+
+        <h2 id="lightboxTitle">
+
+        </h2>
+
+        <p id="lightboxCaption">
+
+        </p>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+                    LETTER PAGE
+====================================================== -->
+
+<section id="letterPage" class="hidden">
+
+<div class="letter-paper">
+
+<div class="wax-seal">
+
+❤️
+
+</div>
+
+<h1>
+
+Dear Dipti,
+
+</h1>
+
+<p>
+
+Happy Birthday ❤️
+
+<br><br>
+
+I don't know whether words are enough
+to express everything that I want to say.
+
+But today I just want to thank you.
+
+Thank you for being a wonderful person.
+
+Thank you for every smile.
+
+Thank you for every memory.
+
+I sincerely hope this birthday brings you
+
+lots of happiness,
+
+success,
+
+peace,
+
+good health,
+
+and endless reasons to smile.
+
+May every dream you have become reality.
+
+Stay happy.
+
+Stay blessed.
+
+Keep smiling forever.
+
+✨❤️✨
+
+</p>
+
+<div class="signature">
+
+With Best Wishes ❤️
+
+<br>
+
+Ashish
+
+</div>
+
+<button id="restartBtn">
+
+Watch Again 🎉
+
+</button>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+                SCRIPT
+====================================================== -->
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
