@@ -9,17 +9,24 @@
 </head>
 <body>
 
+<!-- FLOATING MULTI-SONG CONTROLLER -->
+<div class="music-controller-group">
+    <button class="music-controller" id="prevSongBtn" title="Previous Song">⏮️</button>
+    <button class="music-controller" id="musicToggle" title="Play / Pause">🎵</button>
+    <button class="music-controller" id="nextSongBtn" title="Next Song">⏭️</button>
+</div>
+
 <!-- LOADER -->
 <div id="loader">
     <div class="loader-content">
         <div class="gift-box">🎁</div>
         <h1>Preparing Your Surprise...</h1>
-        <p>Loading 0%</p>
+        <p>Loading 0% 💖</p>
         <div class="loading-bar"><div class="loading-fill"></div></div>
     </div>
 </div>
 
-<audio id="bgMusic" loop src="music/birthday.mp3"></audio>
+<audio id="bgMusic" src="music/song1.mp3"></audio>
 
 <!-- HOME PAGE -->
 <section>
@@ -31,6 +38,13 @@
             It is the day when someone very special came into this world.<br><br>
             I wanted to give you something different. Something made only for you... ❤️
         </p>
+
+        <!-- 1ST AUGUST BIRTHDAY COUNTDOWN -->
+        <div class="counter-card">
+            <h3>✨ Countdown to 1st August ✨</h3>
+            <div id="countdownClock">00d : 00h : 00m : 00s</div>
+        </div>
+
         <a href="question.html" class="btn" id="startBtn">Open Your Surprise 🎁</a>
     </div>
 </section>

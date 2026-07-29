@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎂 Make a Wish & Cut Cake ✨</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="music-controller-group">
+    <button class="music-controller" id="prevSongBtn" title="Previous Song">⏮️</button>
+    <button class="music-controller" id="musicToggle" title="Play / Pause">🎵</button>
+    <button class="music-controller" id="nextSongBtn" title="Next Song">⏭️</button>
+</div>
+<audio id="bgMusic" src="music/song1.mp3"></audio>
+
+<section>
+    <div class="glass">
+        <h2>Make a Wish Dipti! ✨</h2>
+        <h1>Tap the Cake to Cut It 🎂</h1>
+        <p>Click or tap on the cake to blow the candles & celebrate! 🎉</p>
+
+        <!-- 3D REALISTIC CAKE & GLOWING CANDLE -->
+        <div class="cake-wrapper" id="cakeElement">
+            <div class="candle">
+                <div class="flame" id="flameElement">
+                    <div class="flame-inner"></div>
+                </div>
+                <div class="wick"></div>
+            </div>
+            <div class="cake">
+                <div class="plate"></div>
+                <div class="layer layer-bottom"></div>
+                <div class="layer layer-middle"></div>
+                <div class="layer layer-top">
+                    <div class="icing"></div>
+                    <div class="drip drip1"></div>
+                    <div class="drip drip2"></div>
+                    <div class="drip drip3"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="cakeStatusText" class="cake-status">Tap the cake to blow candle! 🕯️</div>
+
+        <a href="message.html" class="btn hidden" id="nextWishBtn">Open My Birthday Wish 💌</a>
+    </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>

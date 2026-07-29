@@ -1,25 +1,166 @@
 "use strict";
 
 /* ===========================================================
-                MUSIC AUTO-PLAY
+    SEAMLESS CONTINUOUS MULTI-SONG PLAYLIST (WITH STATE SAVING)
 =========================================================== */
 const bgMusic = document.getElementById("bgMusic");
+const musicToggle = document.getElementById("musicToggle");
+const nextSongBtn = document.getElementById("nextSongBtn");
+const prevSongBtn = document.getElementById("prevSongBtn");
 
-function initAudio() {
+// 🎵 Aapki Music Playlist
+const playlist = [
+    "music/song1.mp3",
+    "music/song2.mp3",
+    "music/song3.mp3",
+    "music/song4.mp3"
+];
+
+// Load saved state from LocalStorage or set defaults
+let currentSongIndex = parseInt(localStorage.getItem("currentSongIndex")) || 0;
+let isMusicPlaying = localStorage.getItem("isMusicPlaying") === "true";
+let savedTime = parseFloat(localStorage.getItem("musicCurrentTime")) || 0;
+
+function syncMusicState() {
     if (!bgMusic) return;
+
+    // Check if song source changed
+    const targetSrc = playlist[currentSongIndex];
+    if (!bgMusic.src.includes(targetSrc)) {
+        bgMusic.src = targetSrc;
+        bgMusic.currentTime = savedTime;
+    } else if (Math.abs(bgMusic.currentTime - savedTime) > 2) {
+        bgMusic.currentTime = savedTime;
+    }
+
     bgMusic.volume = 0.6;
-    const promise = bgMusic.play();
-    if (promise !== undefined) {
-        promise.catch(() => {});
+
+    if (isMusicPlaying) {
+        bgMusic.play().then(() => {
+            if (musicToggle) musicToggle.classList.add("playing");
+        }).catch(() => {
+            if (musicToggle) musicToggle.classList.remove("playing");
+        });
+    } else {
+        bgMusic.pause();
+        if (musicToggle) musicToggle.classList.remove("playing");
     }
 }
 
-window.addEventListener("load", () => {
-    initAudio();
+// Constantly save current time before leaving page
+window.addEventListener("beforeunload", () => {
+    if (bgMusic) {
+        localStorage.setItem("musicCurrentTime", bgMusic.currentTime);
+        localStorage.setItem("isMusicPlaying", !bgMusic.paused);
+        localStorage.setItem("currentSongIndex", currentSongIndex);
+    }
+});
+
+// Periodic save every 500ms
+setInterval(() => {
+    if (bgMusic && !bgMusic.paused) {
+        localStorage.setItem("musicCurrentTime", bgMusic.currentTime);
+    }
+}, 500);
+
+function toggleAudio() {
+    if (!bgMusic) return;
+    if (bgMusic.paused) {
+        isMusicPlaying = true;
+        localStorage.setItem("isMusicPlaying", "true");
+        bgMusic.play().then(() => {
+            if (musicToggle) musicToggle.classList.add("playing");
+        }).catch(() => {});
+    } else {
+        isMusicPlaying = false;
+        localStorage.setItem("isMusicPlaying", "false");
+        bgMusic.pause();
+        if (musicToggle) musicToggle.classList.remove("playing");
+    }
+}
+
+// ⏭️ Next Song (Circular Loop)
+function playNextSong() {
+    currentSongIndex = (currentSongIndex + 1) % playlist.length;
+    savedTime = 0;
+    localStorage.setItem("currentSongIndex", currentSongIndex);
+    localStorage.setItem("musicCurrentTime", 0);
+    localStorage.setItem("isMusicPlaying", "true");
+    isMusicPlaying = true;
+    syncMusicState();
+}
+
+// ⏮️ Previous Song (Circular Loop)
+function playPrevSong() {
+    currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+    savedTime = 0;
+    localStorage.setItem("currentSongIndex", currentSongIndex);
+    localStorage.setItem("musicCurrentTime", 0);
+    localStorage.setItem("isMusicPlaying", "true");
+    isMusicPlaying = true;
+    syncMusicState();
+}
+
+if (musicToggle) musicToggle.addEventListener("click", toggleAudio);
+if (nextSongBtn) nextSongBtn.addEventListener("click", playNextSong);
+if (prevSongBtn) prevSongBtn.addEventListener("click", playPrevSong);
+
+if (bgMusic) {
+    bgMusic.addEventListener("ended", playNextSong);
+}
+
+// Initial Sync when Page Loads
+window.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("isMusicPlaying") === null) {
+        localStorage.setItem("isMusicPlaying", "true");
+        isMusicPlaying = true;
+    }
+    syncMusicState();
 });
 
 /* ===========================================================
-                LOADER (Index Page Only)
+        1ST AUGUST BIRTHDAY COUNTDOWN TIMER (Home Page)
+=========================================================== */
+const countdownClock = document.getElementById("countdownClock");
+
+function updateCountdownTimer() {
+    if (!countdownClock) return;
+
+    const now = new Date();
+    let currentYear = now.getFullYear();
+    let birthdayDate = new Date(`August 1, ${currentYear} 00:00:00`);
+
+    if (now > birthdayDate && now.getDate() !== 1) {
+        birthdayDate = new Date(`August 1, ${currentYear + 1} 00:00:00`);
+    }
+
+    const diff = birthdayDate - now;
+
+    if (now.getMonth() === 7 && now.getDate() === 1) {
+        countdownClock.textContent = "🎉 It's Birthday Time! Happy Birthday Dipti! 🎂❤️";
+        return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / 1000 / 60) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    const d = String(days).padStart(2, '0');
+    const h = String(hours).padStart(2, '0');
+    const m = String(minutes).padStart(2, '0');
+    const s = String(seconds).padStart(2, '0');
+
+    countdownClock.textContent = `${d}d : ${h}h : ${m}m : ${s}s`;
+}
+
+if (countdownClock) {
+    setInterval(updateCountdownTimer, 1000);
+    updateCountdownTimer();
+}
+
+/* ===========================================================
+                LOADER (index.html)
 =========================================================== */
 const loader = document.getElementById("loader");
 const loadingFill = document.querySelector(".loading-fill");
@@ -99,7 +240,7 @@ if (noBtn && buttonArea && yesBtn) {
 }
 
 /* ===========================================================
-            PANDA PAGE FLOWER & HEART BURST
+            PANDA PAGE FLOWER BURST
 =========================================================== */
 const pandaPage = document.getElementById("pandaPage");
 
@@ -126,6 +267,34 @@ function triggerFlowerBurst() {
 if (pandaPage) {
     window.addEventListener("DOMContentLoaded", () => {
         setTimeout(triggerFlowerBurst, 300);
+    });
+}
+
+/* ===========================================================
+            VIRTUAL CAKE CUTTING GAME (cake.html)
+=========================================================== */
+const cakeElement = document.getElementById("cakeElement");
+const flameElement = document.getElementById("flameElement");
+const cakeStatusText = document.getElementById("cakeStatusText");
+const nextWishBtn = document.getElementById("nextWishBtn");
+
+if (cakeElement) {
+    cakeElement.addEventListener("click", () => {
+        if (flameElement) flameElement.style.display = "none";
+        if (cakeStatusText) cakeStatusText.innerHTML = "Happy Birthday Dipti! 🎉🎂❤️";
+        
+        for (let i = 0; i < 30; i++) {
+            const confetti = document.createElement("div");
+            confetti.className = "firework";
+            confetti.style.left = random(20, 80) + "vw";
+            confetti.style.top = random(20, 60) + "vh";
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 1200);
+        }
+
+        if (nextWishBtn) {
+            nextWishBtn.classList.remove("hidden");
+        }
     });
 }
 
@@ -161,33 +330,16 @@ if (typewriter) {
 }
 
 /* ===========================================================
-        GALLERY LEFT SLIDE-IN & CAPTION CONTROL (gallery.html)
+        GALLERY LEFT SLIDE-IN (gallery.html)
 =========================================================== */
 const photoCards = document.querySelectorAll(".photo-card");
 
 if (photoCards.length > 0) {
-    // Only Photo 6 (Bachpan) and Photo 7 (Marathi Look) have titles
     const memoryTitles = [
-        "",                             // Photo 1
-        "",                             // Photo 2
-        "",                             // Photo 3
-        "",                             // Photo 4
-        "",                             // Photo 5
-        "Little Dipti 👶✨💖",          // Photo 6 (Bachpan)
-        "Marathi Mulgi 🚩🌸💫",        // Photo 7 (Marathi Look)
-        "",                             // Photo 8
-        "",                             // Photo 9
-        "",                             // Photo 10
-        "",                             // Photo 11
-        "",                             // Photo 12
-        "",                             // Photo 13
-        "",                             // Photo 14
-        "",                             // Photo 15
-        "",                             // Photo 16
-        "",                             // Photo 17
-        "",                             // Photo 18
-        "",                             // Photo 19
-        ""                              // Photo 20
+        "", "", "", "", "",
+        "Little Dipti 👶✨💖",
+        "Marathi Mulgi 🚩🌸💫",
+        "", "", "", "", "", "", "", "", "", "", "", "", ""
     ];
 
     photoCards.forEach((card, index) => {
@@ -217,7 +369,7 @@ const lightboxTitle = document.getElementById("lightboxTitle");
 const closeLightbox = document.getElementById("closeLightbox");
 
 if (lightbox && closeLightbox) {
-    document.querySelectorAll(".photo-card img").forEach((img, index) => {
+    document.querySelectorAll(".photo-card img").forEach((img) => {
         img.addEventListener("click", () => {
             lightbox.classList.remove("hidden");
             lightboxImg.src = img.src;
@@ -287,7 +439,6 @@ function createSparkle() {
     setTimeout(() => sparkle.remove(), 2200);
 }
 
-// Background loops with loving emojis & ambient effects
 setInterval(createSparkle, 250);
 setInterval(createFloatingFlower, 1100);
 setInterval(createFloatingQuote, 3200);
