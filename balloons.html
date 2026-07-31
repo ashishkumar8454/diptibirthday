@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎈 Pop The Balloons For A Surprise ✨</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- FLOATING MULTI-SONG CONTROLLER -->
+<div class="music-controller-group">
+    <button class="music-controller" id="prevSongBtn" title="Previous Song">⏮️</button>
+    <button class="music-controller" id="musicToggle" title="Play / Pause">🎵</button>
+    <button class="music-controller" id="nextSongBtn" title="Next Song">⏭️</button>
+</div>
+<audio id="bgMusic" src="music/song1.mp3"></audio>
+
+<section>
+    <div class="glass balloon-page-glass">
+        <h2>🌹 A Special Surprise For You 🌹</h2>
+        <h1>Pop All The Balloons To Reveal My Message 🎈✨</h1>
+        <p class="balloon-instruction">Tap or click each balloon one by one! 👇</p>
+
+        <!-- DECORATIVE ROSES DISPLAY -->
+        <div class="roses-container">
+            <span class="rose-emoji">🌹</span>
+            <span class="rose-emoji">🌹</span>
+            <span class="rose-emoji">🌹</span>
+            <span class="rose-emoji">🌹</span>
+        </div>
+
+        <!-- 4 INTERACTIVE BALLOONS -->
+        <div class="balloon-grid">
+            <div class="interactive-balloon-card" data-word="You">
+                <div class="pop-balloon b-red">
+                    <span class="balloon-string"></span>
+                </div>
+                <div class="revealed-word hidden">You</div>
+            </div>
+
+            <div class="interactive-balloon-card" data-word="Are">
+                <div class="pop-balloon b-pink">
+                    <span class="balloon-string"></span>
+                </div>
+                <div class="revealed-word hidden">Are</div>
+            </div>
+
+            <div class="interactive-balloon-card" data-word="My">
+                <div class="pop-balloon b-purple">
+                    <span class="balloon-string"></span>
+                </div>
+                <div class="revealed-word hidden">My</div>
+            </div>
+
+            <div class="interactive-balloon-card" data-word="Happiness">
+                <div class="pop-balloon b-gold">
+                    <span class="balloon-string"></span>
+                </div>
+                <div class="revealed-word hidden">Happiness</div>
+            </div>
+        </div>
+
+        <!-- REVEALED FULL MESSAGE DISPLAY -->
+        <div id="fullBalloonMessage" class="hidden full-msg-box">
+            💖 " You Are My Happiness " 💖
+        </div>
+
+        <a href="message.html" class="btn hidden" id="nextBalloonBtn">Open My Birthday Wish 💌</a>
+    </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>

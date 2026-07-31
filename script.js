@@ -1,14 +1,14 @@
 "use strict";
 
 /* ===========================================================
-    SEAMLESS CONTINUOUS MULTI-SONG PLAYLIST (WITH STATE SAVING)
+    SEAMLESS CONTINUOUS MULTI-SONG PLAYLIST (WITH AUTOPLAY FIX)
 =========================================================== */
 const bgMusic = document.getElementById("bgMusic");
 const musicToggle = document.getElementById("musicToggle");
 const nextSongBtn = document.getElementById("nextSongBtn");
 const prevSongBtn = document.getElementById("prevSongBtn");
 
-// 🎵 Aapki Music Playlist
+// 🎵 Multi-Song Playlist (music/song1.mp3, song2.mp3, song3.mp3, song4.mp3)
 const playlist = [
     "music/song1.mp3",
     "music/song2.mp3",
@@ -16,15 +16,13 @@ const playlist = [
     "music/song4.mp3"
 ];
 
-// Load saved state from LocalStorage or set defaults
 let currentSongIndex = parseInt(localStorage.getItem("currentSongIndex")) || 0;
-let isMusicPlaying = localStorage.getItem("isMusicPlaying") === "true";
+let isMusicPlaying = localStorage.getItem("isMusicPlaying") !== "false";
 let savedTime = parseFloat(localStorage.getItem("musicCurrentTime")) || 0;
 
 function syncMusicState() {
     if (!bgMusic) return;
 
-    // Check if song source changed
     const targetSrc = playlist[currentSongIndex];
     if (!bgMusic.src.includes(targetSrc)) {
         bgMusic.src = targetSrc;
@@ -41,13 +39,24 @@ function syncMusicState() {
         }).catch(() => {
             if (musicToggle) musicToggle.classList.remove("playing");
         });
-    } else {
-        bgMusic.pause();
-        if (musicToggle) musicToggle.classList.remove("playing");
     }
 }
 
-// Constantly save current time before leaving page
+// Enable music on first screen interaction
+function enableAutoplayOnFirstInteraction() {
+    if (bgMusic && bgMusic.paused && isMusicPlaying) {
+        bgMusic.play().then(() => {
+            if (musicToggle) musicToggle.classList.add("playing");
+        }).catch(() => {});
+    }
+    window.removeEventListener("click", enableAutoplayOnFirstInteraction);
+    window.removeEventListener("touchstart", enableAutoplayOnFirstInteraction);
+}
+
+window.addEventListener("click", enableAutoplayOnFirstInteraction);
+window.addEventListener("touchstart", enableAutoplayOnFirstInteraction);
+
+// State Saving
 window.addEventListener("beforeunload", () => {
     if (bgMusic) {
         localStorage.setItem("musicCurrentTime", bgMusic.currentTime);
@@ -56,7 +65,6 @@ window.addEventListener("beforeunload", () => {
     }
 });
 
-// Periodic save every 500ms
 setInterval(() => {
     if (bgMusic && !bgMusic.paused) {
         localStorage.setItem("musicCurrentTime", bgMusic.currentTime);
@@ -79,7 +87,6 @@ function toggleAudio() {
     }
 }
 
-// ⏭️ Next Song (Circular Loop)
 function playNextSong() {
     currentSongIndex = (currentSongIndex + 1) % playlist.length;
     savedTime = 0;
@@ -90,7 +97,6 @@ function playNextSong() {
     syncMusicState();
 }
 
-// ⏮️ Previous Song (Circular Loop)
 function playPrevSong() {
     currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
     savedTime = 0;
@@ -109,12 +115,7 @@ if (bgMusic) {
     bgMusic.addEventListener("ended", playNextSong);
 }
 
-// Initial Sync when Page Loads
 window.addEventListener("DOMContentLoaded", () => {
-    if (localStorage.getItem("isMusicPlaying") === null) {
-        localStorage.setItem("isMusicPlaying", "true");
-        isMusicPlaying = true;
-    }
     syncMusicState();
 });
 
@@ -271,7 +272,7 @@ if (pandaPage) {
 }
 
 /* ===========================================================
-            VIRTUAL CAKE CUTTING GAME (cake.html)
+    VIRTUAL CAKE & HEAVY FLOWER SHOWER (cake.html)
 =========================================================== */
 const cakeElement = document.getElementById("cakeElement");
 const flameElement = document.getElementById("flameElement");
@@ -279,23 +280,142 @@ const cakeStatusText = document.getElementById("cakeStatusText");
 const nextWishBtn = document.getElementById("nextWishBtn");
 
 if (cakeElement) {
-    cakeElement.addEventListener("click", () => {
-        if (flameElement) flameElement.style.display = "none";
-        if (cakeStatusText) cakeStatusText.innerHTML = "Happy Birthday Dipti! 🎉🎂❤️";
-        
-        for (let i = 0; i < 30; i++) {
-            const confetti = document.createElement("div");
-            confetti.className = "firework";
-            confetti.style.left = random(20, 80) + "vw";
-            confetti.style.top = random(20, 60) + "vh";
-            document.body.appendChild(confetti);
-            setTimeout(() => confetti.remove(), 1200);
-        }
+    let candleBlown = false;
 
-        if (nextWishBtn) {
-            nextWishBtn.classList.remove("hidden");
+    cakeElement.addEventListener("click", () => {
+        if (!candleBlown) {
+            candleBlown = true;
+            if (flameElement) flameElement.style.display = "none";
+            
+            if (cakeStatusText) {
+                cakeStatusText.innerHTML = `
+                    <div class="wish-box">
+                        ✨ Close your eyes and make a wish Dipti... 💖
+                    </div>
+                `;
+            }
+
+            triggerFlowerShower();
+
+            if (nextWishBtn) {
+                setTimeout(() => {
+                    nextWishBtn.textContent = "Open Next Surprise 🎈";
+                    nextWishBtn.classList.remove("hidden");
+                }, 1500);
+            }
         }
     });
+}
+
+function triggerFlowerShower() {
+    const flowerEmojis = ["🌸", "🌺", "🌷", "💐", "🌹", "✨", "💖", "💮", "🌻"];
+
+    for (let i = 0; i < 35; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "firework";
+        confetti.style.left = random(10, 90) + "vw";
+        confetti.style.top = random(10, 60) + "vh";
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 1200);
+    }
+
+    for (let i = 0; i < 55; i++) {
+        setTimeout(() => {
+            const flower = document.createElement("div");
+            flower.className = "flower-burst";
+            flower.innerHTML = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+            flower.style.left = random(5, 95) + "vw";
+            flower.style.top = random(15, 55) + "vh";
+            flower.style.fontSize = random(26, 42) + "px";
+            
+            const tx = random(-280, 280) + "px";
+            const ty = random(-320, 320) + "px";
+            flower.style.setProperty("--tx", tx);
+            flower.style.setProperty("--ty", ty);
+
+            document.body.appendChild(flower);
+            setTimeout(() => flower.remove(), 2500);
+        }, i * 35);
+    }
+}
+
+/* ===========================================================
+        INTERACTIVE BALLOON POPPING GAME (balloons.html)
+=========================================================== */
+const balloonCards = document.querySelectorAll(".interactive-balloon-card");
+const fullBalloonMessage = document.getElementById("fullBalloonMessage");
+const nextBalloonBtn = document.getElementById("nextBalloonBtn");
+
+if (balloonCards.length > 0) {
+    let poppedCount = 0;
+
+    balloonCards.forEach((card) => {
+        card.addEventListener("click", () => {
+            const balloon = card.querySelector(".pop-balloon");
+            const word = card.querySelector(".revealed-word");
+
+            if (balloon && !balloon.classList.contains("popped")) {
+                balloon.classList.add("popped");
+                
+                balloon.style.transform = "scale(1.4)";
+                balloon.style.opacity = "0";
+
+                setTimeout(() => {
+                    balloon.style.display = "none";
+                    if (word) word.classList.remove("hidden");
+                }, 200);
+
+                const rect = card.getBoundingClientRect();
+                createPopBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+
+                poppedCount++;
+
+                if (poppedCount === 4) {
+                    setTimeout(() => {
+                        if (fullBalloonMessage) fullBalloonMessage.classList.remove("hidden");
+                        if (nextBalloonBtn) nextBalloonBtn.classList.remove("hidden");
+                        triggerRosePetalShower();
+                    }, 600);
+                }
+            }
+        });
+    });
+}
+
+function createPopBurst(x, y) {
+    const popItems = ["🌹", "🌸", "✨", "💖", "🎉"];
+    for (let i = 0; i < 12; i++) {
+        const p = document.createElement("div");
+        p.className = "flower-burst";
+        p.innerHTML = popItems[Math.floor(Math.random() * popItems.length)];
+        p.style.left = x + "px";
+        p.style.top = y + "px";
+        p.style.fontSize = random(20, 32) + "px";
+
+        const tx = random(-180, 180) + "px";
+        const ty = random(-200, 100) + "px";
+        p.style.setProperty("--tx", tx);
+        p.style.setProperty("--ty", ty);
+
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 2000);
+    }
+}
+
+function triggerRosePetalShower() {
+    const roseItems = ["🌹", "🌹", "🌸", "💖", "🌷", "✨"];
+    for (let i = 0; i < 40; i++) {
+        setTimeout(() => {
+            const petal = document.createElement("div");
+            petal.className = "floating-flower";
+            petal.innerHTML = roseItems[Math.floor(Math.random() * roseItems.length)];
+            petal.style.left = random(0, 100) + "vw";
+            petal.style.fontSize = random(24, 38) + "px";
+            petal.style.animationDuration = random(4, 8) + "s";
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 8000);
+        }, i * 60);
+    }
 }
 
 /* ===========================================================
