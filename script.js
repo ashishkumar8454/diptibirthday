@@ -1,21 +1,18 @@
 "use strict";
 
 /* ===========================================================
-    SEAMLESS CONTINUOUS MULTI-SONG PLAYLIST (AUTOPLAY FIXED)
+    SEAMLESS CONTINUOUS MULTI-SONG PLAYLIST (FULLY FIXED)
 =========================================================== */
 const bgMusic = document.getElementById("bgMusic");
 const musicToggle = document.getElementById("musicToggle");
 const nextSongBtn = document.getElementById("nextSongBtn");
 const prevSongBtn = document.getElementById("prevSongBtn");
 
-// const playlist = [
-//     "music/song1.mp3",
-//     "music/song2.mp3",
-//     "music/song3.mp3",
-//     "music/song4.mp3"
-// ];
 const playlist = [
-    "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"
+    "music/song1.mp3",
+    "music/song2.mp3",
+    "music/song3.mp3",
+    "music/song4.mp3"
 ];
 
 let currentSongIndex = parseInt(localStorage.getItem("currentSongIndex")) || 0;
@@ -27,10 +24,10 @@ function syncMusicState() {
 
     const targetSrc = playlist[currentSongIndex];
     
-    // Check if audio src needs reload or is different
+    // Exact Source Matching & Re-buffering
     if (!bgMusic.src || !bgMusic.src.includes(encodeURI(targetSrc))) {
         bgMusic.src = targetSrc;
-        bgMusic.load(); // Reloads audio buffer completely
+        bgMusic.load();
         bgMusic.currentTime = savedTime;
     } else if (Math.abs(bgMusic.currentTime - savedTime) > 2) {
         bgMusic.currentTime = savedTime;
@@ -44,17 +41,18 @@ function syncMusicState() {
             playPromise.then(() => {
                 if (musicToggle) musicToggle.classList.add("playing");
             }).catch(err => {
-                console.log("Autoplay waiting for user tap/click...", err);
+                console.log("Browser waiting for user tap to enable audio:", err);
                 if (musicToggle) musicToggle.classList.remove("playing");
             });
         }
     }
 }
 
-// Global user touch listener to unlock browser audio policy
+// Global user click/tap listener to unblock browser autoplay policy
 function enableAutoplayOnFirstInteraction() {
-    if (bgMusic && isMusicPlaying) {
-        bgMusic.load();
+    if (bgMusic) {
+        isMusicPlaying = true;
+        localStorage.setItem("isMusicPlaying", "true");
         bgMusic.play().then(() => {
             if (musicToggle) musicToggle.classList.add("playing");
         }).catch(() => {});
