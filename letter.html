@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✉️ A Birthday Letter For You ✨</title>
+    <title>✉️ A Special Letter For You ✨</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
 
+<!-- FLOATING MULTI-SONG CONTROLLER -->
 <div class="music-controller-group">
     <button class="music-controller" id="prevSongBtn" title="Previous Song">⏮️</button>
     <button class="music-controller" id="musicToggle" title="Play / Pause">🎵</button>
@@ -17,26 +18,36 @@
 <audio id="bgMusic" src="music/song1.mp3"></audio>
 
 <section id="letterPage">
-    <div class="letter-paper">
+    <!-- ENVELOPE WRAPPER (PREMIUM 3D ENVELOPE) -->
+    <div class="envelope-wrapper" id="envelope">
+        <div class="envelope-flap"></div>
         <div class="wax-seal">❤️</div>
-        <h1>Dear Dipti,</h1>
-        
-        <p>Happy Birthday ❤️</p>
-        
-        <p>I don't know whether words are enough to express everything that I want to say. But today I just want to thank you.</p>
-        
-        <p>Thank you for being a wonderful person. Thank you for every smile. Thank you for every memory.</p>
-        
-        <p>I sincerely hope this birthday brings you lots of happiness, success, peace, good health, and endless reasons to smile.</p>
-        
-        <p>May every dream you have become reality. Stay happy. Stay blessed. Keep smiling forever. ✨❤️✨</p>
+        <div class="envelope-text">
+            For Dipti 💌
+            <span>Tap to Open Your Letter ✨</span>
+        </div>
+    </div>
 
-        <div class="signature">
+    <!-- FLORAL PARCHMENT LETTER PAPER -->
+    <div class="letter-paper hidden" id="letterPaper">
+        <!-- FLORAL CORNER DECORATIONS -->
+        <div class="floral-corner top-left">🌸</div>
+        <div class="floral-corner top-right">🌹</div>
+        <div class="floral-corner bottom-left">🌹</div>
+        <div class="floral-corner bottom-right">🌸</div>
+
+        <!-- WAX SEAL STAMP -->
+        <div class="wax-seal-top">❤️</div>
+        
+        <!-- TYPEWRITER TEXT CONTAINER -->
+        <div id="typewriterLetter"></div>
+        
+        <div class="letter-footer-signature hidden" id="letterSignature">
             With Best Wishes ❤️<br>
-            Ashish
+            <span class="sig-name">Ashish</span>
         </div>
 
-        <a href="index.html" class="btn">Watch Again 🎉</a>
+        <a href="index.html" class="btn hidden" id="watchAgainBtn" style="margin-top: 25px;">Replay Magic 🎉</a>
     </div>
 </section>
 

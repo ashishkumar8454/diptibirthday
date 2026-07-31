@@ -1,19 +1,21 @@
 "use strict";
 
 /* ===========================================================
-    SEAMLESS CONTINUOUS MULTI-SONG PLAYLIST (WITH AUTOPLAY FIX)
+    SEAMLESS CONTINUOUS MULTI-SONG PLAYLIST (AUTOPLAY FIXED)
 =========================================================== */
 const bgMusic = document.getElementById("bgMusic");
 const musicToggle = document.getElementById("musicToggle");
 const nextSongBtn = document.getElementById("nextSongBtn");
 const prevSongBtn = document.getElementById("prevSongBtn");
 
-// 🎵 Multi-Song Playlist (music/song1.mp3, song2.mp3, song3.mp3, song4.mp3)
+// const playlist = [
+//     "music/song1.mp3",
+//     "music/song2.mp3",
+//     "music/song3.mp3",
+//     "music/song4.mp3"
+// ];
 const playlist = [
-    "music/song1.mp3",
-    "music/song2.mp3",
-    "music/song3.mp3",
-    "music/song4.mp3"
+    "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"
 ];
 
 let currentSongIndex = parseInt(localStorage.getItem("currentSongIndex")) || 0;
@@ -24,27 +26,35 @@ function syncMusicState() {
     if (!bgMusic) return;
 
     const targetSrc = playlist[currentSongIndex];
-    if (!bgMusic.src.includes(targetSrc)) {
+    
+    // Check if audio src needs reload or is different
+    if (!bgMusic.src || !bgMusic.src.includes(encodeURI(targetSrc))) {
         bgMusic.src = targetSrc;
+        bgMusic.load(); // Reloads audio buffer completely
         bgMusic.currentTime = savedTime;
     } else if (Math.abs(bgMusic.currentTime - savedTime) > 2) {
         bgMusic.currentTime = savedTime;
     }
 
-    bgMusic.volume = 0.6;
+    bgMusic.volume = 0.7;
 
     if (isMusicPlaying) {
-        bgMusic.play().then(() => {
-            if (musicToggle) musicToggle.classList.add("playing");
-        }).catch(() => {
-            if (musicToggle) musicToggle.classList.remove("playing");
-        });
+        let playPromise = bgMusic.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                if (musicToggle) musicToggle.classList.add("playing");
+            }).catch(err => {
+                console.log("Autoplay waiting for user tap/click...", err);
+                if (musicToggle) musicToggle.classList.remove("playing");
+            });
+        }
     }
 }
 
-// Enable music on first screen interaction
+// Global user touch listener to unlock browser audio policy
 function enableAutoplayOnFirstInteraction() {
-    if (bgMusic && bgMusic.paused && isMusicPlaying) {
+    if (bgMusic && isMusicPlaying) {
+        bgMusic.load();
         bgMusic.play().then(() => {
             if (musicToggle) musicToggle.classList.add("playing");
         }).catch(() => {});
@@ -56,7 +66,6 @@ function enableAutoplayOnFirstInteraction() {
 window.addEventListener("click", enableAutoplayOnFirstInteraction);
 window.addEventListener("touchstart", enableAutoplayOnFirstInteraction);
 
-// State Saving
 window.addEventListener("beforeunload", () => {
     if (bgMusic) {
         localStorage.setItem("musicCurrentTime", bgMusic.currentTime);
@@ -120,7 +129,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ===========================================================
-        1ST AUGUST BIRTHDAY COUNTDOWN TIMER (Home Page)
+        1ST AUGUST BIRTHDAY COUNTDOWN TIMER
 =========================================================== */
 const countdownClock = document.getElementById("countdownClock");
 
@@ -236,7 +245,7 @@ if (noBtn && buttonArea && yesBtn) {
     }
 
     noBtn.addEventListener("mouseenter", moveNoButton);
-    noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); moveNoButton(); });
+    noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); moveNoButton(); }, { passive: false });
     noBtn.addEventListener("click", (e) => { e.preventDefault(); moveNoButton(); });
 }
 
@@ -440,6 +449,7 @@ function startTypewriter() {
             if (galleryBtn) {
                 galleryBtn.style.opacity = "1";
                 galleryBtn.style.pointerEvents = "auto";
+                galleryBtn.classList.remove("hidden");
             }
         }
     }, 35);
@@ -493,7 +503,7 @@ if (lightbox && closeLightbox) {
         img.addEventListener("click", () => {
             lightbox.classList.remove("hidden");
             lightboxImg.src = img.src;
-            lightboxTitle.textContent = "Special Memory ❤️✨";
+            if (lightboxTitle) lightboxTitle.textContent = "Special Memory ❤️✨";
         });
     });
 
@@ -501,6 +511,53 @@ if (lightbox && closeLightbox) {
     lightbox.addEventListener("click", (e) => {
         if (e.target === lightbox) lightbox.classList.add("hidden");
     });
+}
+
+/* ===========================================================
+        ENVELOPE OPEN & TYPEWRITER LETTER LOGIC (letter.html)
+=========================================================== */
+const envelope = document.getElementById("envelope");
+const letterPaper = document.getElementById("letterPaper");
+const typewriterLetter = document.getElementById("typewriterLetter");
+const letterSignature = document.getElementById("letterSignature");
+const watchAgainBtn = document.getElementById("watchAgainBtn");
+
+if (envelope && letterPaper) {
+    envelope.addEventListener("click", () => {
+        envelope.classList.add("open");
+
+        setTimeout(() => {
+            envelope.style.opacity = "0";
+            setTimeout(() => {
+                envelope.style.display = "none";
+                letterPaper.classList.remove("hidden");
+                letterPaper.style.animation = "slideFromLeft 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards";
+                
+                startLetterTypewriter();
+                startCelebration();
+            }, 400);
+        }, 600);
+    });
+}
+
+function startLetterTypewriter() {
+    if (!typewriterLetter) return;
+
+    const fullLetterText = `Dear Dipti,\n\nHappy Birthday ❤️✨\n\n6th October 2024... mujhe aaj bhi wo din ache se yaad hai jab main tumse mila tha. Tab mujhe zara sa bhi andaza nahi tha ki tum meri life mein itni important ho jaogi.\n\nIn do saalon mein hum lade bhi, kabhi-kabhi baat bhi nahi hui... par sach boloon toh jab tumse ek din bhi baat nahi hoti na, toh dil ko bohot bura lagta hai. Pata hi nahi chala ki time ke saath hamari friendship kab itni strong aur special ho gayi.\n\nThank you so much for all the conversations, all the memories, and all the smiles jo tumne mujhe in do saalon mein diye hain. Tumhe shayad andaza bhi nahi hai ki tum kitni special ho. Khas-kar mere liye...\n\nKaash mere paas koi aisa power hota ki main tumhe apni aankhon se khud ko dekhne ki ability de pata, tab tumhe pata chalta ki tum kitni pyari aur kitni special ho! 💖\n\nBas ek baat hamesha yaad rakhna... hamesha khush raha karo, hasti raha karo, aur kabhi roya mat karo. Jab tum roti ho na, mujhe bohot bura lagta hai. Tumhara ye dost tumhe hamesha sirf aur sirf hassta hua dekhna chahta hai.\n\nMay this birthday bring you endless happiness, success, and all the love you deserve. Always stay the way you are. 🎂✨`;
+
+    typewriterLetter.innerHTML = "";
+    let charIndex = 0;
+
+    const letterTimer = setInterval(() => {
+        typewriterLetter.innerHTML += fullLetterText.charAt(charIndex);
+        charIndex++;
+
+        if (charIndex >= fullLetterText.length) {
+            clearInterval(letterTimer);
+            if (letterSignature) letterSignature.classList.remove("hidden");
+            if (watchAgainBtn) watchAgainBtn.classList.remove("hidden");
+        }
+    }, 35);
 }
 
 /* ===========================================================
@@ -567,8 +624,6 @@ setInterval(createFloatingBalloon, 2600);
 /* ===========================================================
             FIREWORKS CELEBRATION (letter.html)
 =========================================================== */
-const letterPage = document.getElementById("letterPage");
-
 function startCelebration() {
     for (let i = 0; i < 25; i++) {
         setTimeout(() => {
@@ -580,8 +635,4 @@ function startCelebration() {
             setTimeout(() => firework.remove(), 1200);
         }, i * 250);
     }
-}
-
-if (letterPage) {
-    startCelebration();
 }
